@@ -1,17 +1,30 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import Header from '../components/Header.astro';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+const pageTitle = "Grow Your Own Medicine – Medicinal Garden Kit";
+const pageDescription = "Discover how you can grow 10 essential medicinal plants in your backyard. Order your Medicinal Garden Kit today!";
 ---
 
 <!doctype html>
 <html lang="en">
 	<head>
+		<meta charset="UTF-8" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDescription} />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 	</head>
-	<body>
+	<body class="bg-green-50 text-gray-800 font-sans">
 		<Header />
+		<!-- Hero -->
+		<section class="text-center py-16 px-4 bg-green-100">
+			<h1 class="text-4xl md:text-5xl font-bold mb-4">Grow Your Own Medicine</h1>
+			<p class="text-lg md:text-xl mb-6 max-w-2xl mx-auto">The Medicinal Garden Kit includes 10 powerful herbs you can grow in your backyard to naturally support your family's health.</p>
+			<a href="https://medicinalseedkit.com/kit/#aff=flash-deal" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-xl transition">Order Now</a>
+		  </section>
 		<main>
 			<h1>🧑‍🚀 Hello, Astronaut!</h1>
 			<p>
