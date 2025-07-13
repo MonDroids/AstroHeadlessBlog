@@ -1,13 +1,39 @@
 ---
-import { fetchPostBySlug } from "../../lib/fetchPosts";
-import type { WPPost } from "../../types/wp";
+import { GraphQLClient, gql } from 'graphql-request';
+import BlogLayout from '../../layouts/BlogLayout.astro';
+
+const endpoint = 'https://www.centuryhousegardens.com/graphql';
+const client = new GraphQLClient(endpoint);
 
 const { slug } = Astro.params;
-const post: WPPost | null = await fetchPostBySlug(slug);
-if (!post) throw new Error("Post not found");
+
+const query = gql`
+  query GetPostBySlug($slug: ID!) {
+    post(id: $slug, idType: SLUG) {
+      title
+      content
+      date
+      excerpt
+    }
+  }
+`;
+
+const variables = { slug };
+const { post } = await client.request(query, variables);
+
+// Affiliate disclosure block
+const disclosureHTML = `
+  <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 p-4 rounded mb-6 text-sm">
+    📢 <strong>Disclosure:</strong> This post contains affiliate links. If you purchase through them, I may earn a small commission at no extra cost to you.
+  </div>
+`;
+
+const modifiedContent = disclosureHTML + post.content;
 ---
 
-<main class="max-w-3xl mx-auto px-4 py-12">
-  <h1 class="text-4xl font-bold mb-4" innerHTML={post.title.rendered}></h1>
-  <article class="prose dark:prose-invert" innerHTML={post.content.rendered}></article>
-</main>
+<BlogLayout title={post.title} description={post.excerpt}>
+  <h1 class="text-4xl font-bold mb-2">{post.title}</h1>
+  <p class="text-sm text-gray-500 mb-6">{new Date(post.date).toLocaleDateString()}</p>
+
+  <article class="prose max-w-none" innerHTML={modifiedContent}></article>
+</BlogLayout>
