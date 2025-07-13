@@ -1,0 +1,13 @@
+---
+import { fetchPostBySlug } from "../../lib/fetchPosts";
+import type { WPPost } from "../../types/wp";
+
+const { slug } = Astro.params;
+const post: WPPost | null = await fetchPostBySlug(slug);
+if (!post) throw new Error("Post not found");
+---
+
+<main class="max-w-3xl mx-auto px-4 py-12">
+  <h1 class="text-4xl font-bold mb-4" innerHTML={post.title.rendered}></h1>
+  <article class="prose dark:prose-invert" innerHTML={post.content.rendered}></article>
+</main>
