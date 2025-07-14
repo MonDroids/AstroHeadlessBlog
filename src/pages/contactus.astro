@@ -1,0 +1,66 @@
+---
+import ContactHeroImage from '../assets/blog-placeholder-about.jpg';
+import Layout from '../layouts/BlogPost.astro';
+---
+
+<Layout
+    title="Contact Us"
+    description="Бидэнтэй холбоо барих"
+    pubDate={new Date('July 14 2025')}
+    heroImage={ContactHeroImage}
+>
+    <h2>Холбоо барих</h2>
+    <p>
+        Та доорх формыг ашиглан бидэнд хүсэлт, санал, асуултаа илгээж болно.
+    </p>
+    <form class="contact-form" method="post">
+        <label>
+            Нэр:
+            <input type="text" name="name" required />
+        </label>
+        <label>
+            Имэйл:
+            <input type="email" name="email" required />
+        </label>
+        <label>
+            Мессеж:
+            <textarea name="message" rows="5" required></textarea>
+        </label>
+        <button type="submit">Илгээх</button>
+    </form>
+</Layout>
+
+<style>
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    max-width: 400px;
+    margin: 2em auto 0 auto;
+}
+.contact-form label {
+    display: flex;
+    flex-direction: column;
+    font-weight: 500;
+    gap: 0.3em;
+}
+.contact-form input,
+.contact-form textarea {
+    padding: 0.5em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1em;
+}
+.contact-form button {
+    background: var(--accent, #4f46e5);
+    color: #fff;
+    border: none;
+    padding: 0.7em 1.5em;
+    border-radius: 4px;
+    font-size: 1em;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.2s;
+}
+.contact-form button:hover {
+    background: #3730a3;
