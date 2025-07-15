@@ -2,10 +2,10 @@
 
 import { GraphQLClient, gql } from 'graphql-request';
 
-const endpoint = 'https://centuryhousegardens.com/graphql'; // энд өөрийн site link -ээ оруулна
+const endpoint = 'https://centuryhousegardens.com/graphql';
 const client = new GraphQLClient(endpoint);
 
-// POSTS-г авах GraphQL query
+//Query, бүх постуудыг авах
 export const GET_POSTS = gql`
   query GetPosts($first: Int = 1000) {
     posts(first: $first) {
@@ -15,12 +15,17 @@ export const GET_POSTS = gql`
         excerpt
         content
         date
+        featuredImage {
+          node {
+            sourceUrl
+          }
+        }
       }
     }
   }
 `;
 
-// SLUG-аар нэг POST авах query
+//Query, постыг slug-аар авах
 export const GET_POST_BY_SLUG = gql`
   query GetPostBySlug($slug: ID!) {
     post(id: $slug, idType: SLUG) {
@@ -28,16 +33,47 @@ export const GET_POST_BY_SLUG = gql`
       content
       excerpt
       date
+      featuredImage {
+        node {
+          sourceUrl
+        }
+      }
     }
   }
 `;
 
-export async function fetchGraphQLPosts(limit = 1000) {
-    const data: { posts: { nodes: any[] } } = await client.request(GET_POSTS, { first: limit });
-    return data.posts.nodes;
+//Төрөл тодорхойлсон интерфэйсүүд
+export interface FeaturedImageNode {
+  node: {
+    sourceUrl: string;
+  };
 }
 
-export async function fetchGraphQLPostBySlug(slug: string) {
-    const data: { post: { title: string; content: string; excerpt: string; date: string } } = await client.request(GET_POST_BY_SLUG, { slug });
-    return data.post;
+export interface GraphQLPost {
+  slug: string;
+  title: string;
+  excerpt: string;
+  content: string;
+  date: string;
+  featuredImage?: FeaturedImageNode | null;
+}
+
+export interface GraphQLSinglePost {
+  title: string;
+  excerpt: string;
+  content: string;
+  date: string;
+  featuredImage?: FeaturedImageNode | null;
+}
+
+//Бүх постыг авах функц
+export async function fetchGraphQLPosts(limit = 1000): Promise<GraphQLPost[]> {
+  const data = await client.request<{ posts: { nodes: GraphQLPost[] } }>(GET_POSTS, { first: limit });
+  return data.posts.nodes;
+}
+
+//Нэг постыг slug-аар авах функц
+export async function fetchGraphQLPostBySlug(slug: string): Promise<GraphQLSinglePost> {
+  const data = await client.request<{ post: GraphQLSinglePost }>(GET_POST_BY_SLUG, { slug });
+  return data.post;
 }
