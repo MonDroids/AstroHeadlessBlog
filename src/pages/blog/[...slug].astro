@@ -2,31 +2,42 @@
 import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import Header from '../../components/Header.astro';
-import { fetchPostBySlug } from '../../lib/fetchPosts';
 
+import { fetchGraphQLPostBySlug, fetchGraphQLPosts } from '../../lib/graphQl'; //GraphQL client
+
+// Динамик нөхцөл бий болгох
+export async function getStaticPaths() {
+  const posts = await fetchGraphQLPosts();
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+  }));
+}
+
+// slug-г параметраас авах
 const { slug } = Astro.params;
 if (typeof slug !== 'string') {
   throw new Error('Slug parameter is missing or invalid');
 }
-const post = await fetchPostBySlug(slug);
 
+// тухайн постыг авах
+const post = await fetchGraphQLPostBySlug(slug);
 if (!post) throw new Error(`Post not found`);
 ---
 
 <html lang="en">
   <head>
     <BaseHead
-      title={post.title.rendered}
-      description={post.excerpt.rendered.replace(/<[^>]+>/g, '')}
+      title={post.title}
+      description={post.excerpt.replace(/<[^>]+>/g, '')}
     />
   </head>
   <body class="prose dark:prose-invert dark:bg-gray-900 dark:text-white">
     <Header />
     <main>
       <article>
-      <h1>{post?.title.rendered}</h1>
-      <div set:html={post?.content.rendered} />
-    </article>
+        <h1>{post.title}</h1>
+        <div set:html={post.content} />
+      </article>
     </main>
     <Footer />
   </body>
