@@ -14,7 +14,7 @@ export async function fetchPosts(): Promise<WPPost[]> {
 
 
 
-export type WPPost = {
+export interface WPPost {
   id: number;
   slug: string;
   title: {
@@ -26,13 +26,6 @@ export type WPPost = {
   content: {
     rendered: string;
   };
-  date: string;
-  _embedded?: {
-    ["wp:featuredmedia"]?: [
-      {
-        id: number;
-        source_url: string;
-      }
-    ];
-  };
-};
+  // нэмэлт шаардлагатай _embedded
+}
+
