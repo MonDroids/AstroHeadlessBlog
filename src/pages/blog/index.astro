@@ -4,22 +4,15 @@ import Footer from '../../components/Footer.astro';
 import FormattedDate from '../../components/FormattedDate.astro';
 import Header from '../../components/Header.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
-import { fetchPosts } from '../../lib/fetchPosts';
-import type { WPPost } from '../../types/wp';
+import { fetchGraphQLPosts } from '../../lib/graphQl';
 
-const posts: WPPost[] = await fetchPosts();
-posts.forEach(post => {
-  console.log(post.title.rendered);
-  console.log(post._embedded?.["wp:featuredmedia"]?.[0]?.source_url);
-});
-
+const posts = await fetchGraphQLPosts(); // <-- GraphQL ашиглаж байна
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
     <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-    <!-- styles... -->
   </head>
   <body>
     <Header />
@@ -27,23 +20,23 @@ posts.forEach(post => {
       <section>
         <ul>
           {posts.map((post) => (
-  <li>
-    <a href={`/blog/${post.slug}/`}>
-      {post._embedded?.["wp:featuredmedia"]?.[0]?.source_url && (
-        <img
-          width="720"
-          height="360"
-          src={post._embedded["wp:featuredmedia"][0].source_url}
-          alt={post.title.rendered}
-        />
-      )}
-      <h4 class="title">{post.title.rendered}</h4>
-      <p class="date">
-        <FormattedDate date={new Date(post.date)} />
-      </p>
-    </a>
-  </li>
-))}
+            <li>
+              <a href={`/blog/${post.slug}/`}>
+                {post.featuredImage?.node?.sourceUrl && (
+                  <img
+                    width="720"
+                    height="360"
+                    src={post.featuredImage.node.sourceUrl}
+                    alt={post.title}
+                  />
+                )}
+                <h4 class="title">{post.title}</h4>
+                <p class="date">
+                  <FormattedDate date={new Date(post.date)} />
+                </p>
+              </a>
+            </li>
+          ))}
         </ul>
       </section>
     </main>
