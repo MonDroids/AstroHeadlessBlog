@@ -5,7 +5,8 @@ import FormattedDate from '../../components/FormattedDate.astro';
 import Header from '../../components/Header.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
 import { fetchGraphQLPosts } from '../../lib/graphQl';
-
+const pageTitle = "Grow Your Own Medicine – Medicinal Garden Kit";
+const pageDescription = "Discover how you can grow 10 essential medicinal plants in your backyard. Order your Medicinal Garden Kit today!";
 const posts = await fetchGraphQLPosts(); // <-- GraphQL ашиглаж байна
 ---
 
