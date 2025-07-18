@@ -1,0 +1,20 @@
+---
+// ContactForm.astro
+---
+
+<form id="contact-form" class="space-y-4">
+  <input type="text" name="name" placeholder="Your name" required class="border p-2 w-full" />
+  <input type="email" name="email" placeholder="Your email" required class="border p-2 w-full" />
+  <textarea name="message" placeholder="Your message" required class="border p-2 w-full"></textarea>
+  <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded">Send</button>
+</form>
+
+<script type="module">
+  import emailjs from 'emailjs-com';
+  emailjs.init("YOUR_PUBLIC_KEY");
+  document.getElementById("contact-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    await emailjs.sendForm("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", e.target);
+    alert("Message sent!");
+  });
+</script>

@@ -1,0 +1,23 @@
+---
+// MailchimpForm.astro
+---
+
+<form
+  action="https://YOUR_DC.usX.list-manage.com/subscribe/post?u=XXXXXXX&amp;id=XXXXXXX"
+  method="post"
+  target="_blank"
+  class="space-y-4"
+>
+  <label for="email">Subscribe to our newsletter:</label>
+  <input
+    type="email"
+    name="EMAIL"
+    id="email"
+    required
+    placeholder="Your email"
+    class="border p-2 rounded w-full"
+  />
+  <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">
+    Subscribe
+  </button>
+</form>
