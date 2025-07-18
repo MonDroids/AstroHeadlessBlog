@@ -1,0 +1,32 @@
+---
+const { slug, title } = Astro.props;
+const fullUrl = `https://yourdomain.com/blog/${slug}`;
+---
+
+<div class="flex gap-2 mt-4">
+  <a href={`https://twitter.com/intent/tweet?url=${fullUrl}`} target="_blank" class="text-blue-500">Twitter</a>
+  <a href={`https://www.facebook.com/sharer/sharer.php?u=${fullUrl}`} target="_blank" class="text-blue-700">Facebook</a>
+  <a href={`https://www.linkedin.com/shareArticle?mini=true&url=${fullUrl}`} target="_blank" class="text-blue-800">LinkedIn</a>
+</div>
+<style>
+  .flex {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+  a {
+    text-decoration: none;
+    padding: 0.5rem;
+    border-radius: 4px;
+    color: white;
+  }
+  a.text-blue-500 {
+    background-color: #1DA1F2; /* Twitter */
+  }
+  a.text-blue-700 {
+    background-color: #1877F2; /* Facebook */
+  }
+  a.text-blue-800 {
+    background-color: #0077B5; /* LinkedIn */
+  }
+</style>
