@@ -2,7 +2,7 @@
 
 import { GraphQLClient, gql } from 'graphql-request';
 
-const endpoint = 'https://centuryhousegardens.com/graphql';
+const endpoint = 'https://cms.centuryhousegardens.com/graphql';
 const client = new GraphQLClient(endpoint);
 
 //Query, бүх постуудыг авах
@@ -68,12 +68,21 @@ export interface GraphQLSinglePost {
 
 //Бүх постыг авах функц
 export async function fetchGraphQLPosts(limit = 1000): Promise<GraphQLPost[]> {
-  const data = await client.request<{ posts: { nodes: GraphQLPost[] } }>(GET_POSTS, { first: limit });
-  return data.posts.nodes;
+  try {
+    const data = await client.request<{ posts: { nodes: GraphQLPost[] } }>(GET_POSTS, { first: limit });
+    return data.posts.nodes;
+  } catch (error) {
+    console.error("GraphQL Error in fetchGraphQLPosts:", error);
+    return [];
+  }
 }
 
-//Нэг постыг slug-аар авах функц
-export async function fetchGraphQLPostBySlug(slug: string): Promise<GraphQLSinglePost> {
-  const data = await client.request<{ post: GraphQLSinglePost }>(GET_POST_BY_SLUG, { slug });
-  return data.post;
+export async function fetchGraphQLPostBySlug(slug: string): Promise<GraphQLSinglePost | null> {
+  try {
+    const data = await client.request<{ post: GraphQLSinglePost }>(GET_POST_BY_SLUG, { slug });
+    return data.post;
+  } catch (error) {
+    console.error(`GraphQL Error fetching slug "${slug}":`, error);
+    return null;
+  }
 }

@@ -1,9 +1,10 @@
 ---
 import HeaderLink from './HeaderLink.astro';
 
+const currentPath = Astro.url.pathname;
 ---
 
-<header>
+<header class="bg-white dark:bg-gray-900 shadow-md px-4 py-2">
   <nav>
     <div class="nav-section logo">
       <a href="/">
