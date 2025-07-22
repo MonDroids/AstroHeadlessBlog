@@ -1,7 +1,6 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
-import Header from '../components/Header.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 const pageTitle = "Grow Your Own Medicine – Medicinal Garden Kit";
 const pageDescription = "Discover how you can grow 10 essential medicinal plants in your backyard. Order your Medicinal Garden Kit today!";
@@ -16,21 +15,105 @@ const pageDescription = "Discover how you can grow 10 essential medicinal plants
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-		<Header />
 	</head>
 	<body class="bg-green-50 text-gray-800 font-Atkinson">
+		
+		<!-- Responsive Header with Hamburger Menu -->
+		<header class="bg-white shadow-md sticky top-0 z-50">
+			<nav class="container mx-auto px-4 py-4">
+				<div class="flex items-center justify-between">
+					<!-- Logo -->
+					<div class="flex items-center">
+						<a href="/" class="text-2xl font-bold text-green-700">
+							<img src="/logo.svg" alt="logo" class="h-12 w-auto" />
+						</a>
+					</div>
+					
+					<!-- Desktop Navigation -->
+					<div class="hidden md:flex items-center space-x-8">
+						<a href="/" class="text-gray-700 hover:text-green-700 transition-colors duration-200 font-medium">Home</a>
+						<a href="/blog" class="text-gray-700 hover:text-green-700 transition-colors duration-200 font-medium">Blog</a>
+						<a href="/about" class="text-gray-700 hover:text-green-700 transition-colors duration-200 font-medium">About</a>
+						<a href="/privacy" class="text-gray-700 hover:text-green-700 transition-colors duration-200 font-medium">Privacy</a>
+						<a href="/terms" class="text-gray-700 hover:text-green-700 transition-colors duration-200 font-medium">Terms</a>
+						<a href="/contactus" class="text-gray-700 hover:text-green-700 transition-colors duration-200 font-medium">Contact</a>
+					</div>
+					
+					<!-- Social Links (Desktop) -->
+					<div class="hidden md:flex items-center space-x-4">
+						<a href="https://m.webtoo.ls/@astro" target="_blank" aria-label="Mastodon" class="text-gray-600 hover:text-green-700 transition-colors duration-200">
+							<svg viewBox="0 0 16 16" aria-hidden="true" width="24" height="24" class="fill-current">
+								<path d="M11.19 12.195c2.016-.24 3.77-1.475 3.99-2.603.348-1.778.32-4.339.32-4.339 0-3.47-2.286-4.488-2.286-4.488C12.062.238 10.083.017 8.027 0h-.05C5.92.017 3.942.238 2.79.765c0 0-2.285 1.017-2.285 4.488l-.002.662c-.004.64-.007 1.35.011 2.091.083 3.394.626 6.74 3.78 7.57 1.454.383 2.703.463 3.709.408 1.823-.1 2.847-.647 2.847-.647l-.06-1.317s-1.303.41-2.767.36c-1.45-.05-2.98-.156-3.215-1.928a3.614 3.614 0 0 1-.033-.496s1.424.346 3.228.428c1.103.05 2.137-.064 3.188-.189zm1.613-2.47H11.13v-4.08c0-.859-.364-1.295-1.091-1.295-.804 0-1.207.517-1.207 1.541v2.233H7.168V5.89c0-1.024-.403-1.541-1.207-1.541-.727 0-1.091.436-1.091 1.296v4.079H3.197V5.522c0-.859.22-1.541.66-2.046.456-.505 1.052-.764 1.793-.764.856 0 1.504.328 1.933.983L8 4.39l.417-.695c.429-.655 1.077-.983 1.934-.983.74 0 1.336.259 1.791.764.442.505.661 1.187.661 2.046v4.203z"></path>
+							</svg>
+						</a>
+						<a href="https://twitter.com/astrodotbuild" target="_blank" aria-label="Twitter" class="text-gray-600 hover:text-green-700 transition-colors duration-200">
+							<svg viewBox="0 0 16 16" aria-hidden="true" width="24" height="24" class="fill-current">
+								<path d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z"></path>
+							</svg>
+						</a>
+						<a href="https://github.com/withastro/astro" target="_blank" aria-label="GitHub" class="text-gray-600 hover:text-green-700 transition-colors duration-200">
+							<svg viewBox="0 0 16 16" aria-hidden="true" width="24" height="24" class="fill-current">
+								<path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path>
+							</svg>
+						</a>
+					</div>
+					
+					<!-- Mobile Hamburger Button -->
+					<button class="md:hidden hamburger-btn focus:outline-none focus:ring-2 focus:ring-green-500 p-2" aria-label="Toggle menu">
+						<div class="hamburger-icon">
+							<span class="hamburger-line"></span>
+							<span class="hamburger-line"></span>
+							<span class="hamburger-line"></span>
+						</div>
+					</button>
+				</div>
+				
+				<!-- Mobile Menu -->
+				<div class="md:hidden mobile-menu">
+					<div class="px-2 pt-4 pb-6 space-y-3">
+						<a href="/" class="block px-3 py-2 text-gray-700 hover:text-green-700 hover:bg-green-50 rounded-md transition-colors duration-200 font-medium">Home</a>
+						<a href="/blog" class="block px-3 py-2 text-gray-700 hover:text-green-700 hover:bg-green-50 rounded-md transition-colors duration-200 font-medium">Blog</a>
+						<a href="/about" class="block px-3 py-2 text-gray-700 hover:text-green-700 hover:bg-green-50 rounded-md transition-colors duration-200 font-medium">About</a>
+						<a href="/privacy" class="block px-3 py-2 text-gray-700 hover:text-green-700 hover:bg-green-50 rounded-md transition-colors duration-200 font-medium">Privacy Policy</a>
+						<a href="/terms" class="block px-3 py-2 text-gray-700 hover:text-green-700 hover:bg-green-50 rounded-md transition-colors duration-200 font-medium">Terms Of Service</a>
+						<a href="/contactus" class="block px-3 py-2 text-gray-700 hover:text-green-700 hover:bg-green-50 rounded-md transition-colors duration-200 font-medium">Contact Us</a>
+						
+						<!-- Mobile Social Links -->
+						<div class="flex items-center justify-center space-x-4 pt-4 border-t border-gray-200">
+							<a href="https://m.webtoo.ls/@astro" target="_blank" aria-label="Mastodon" class="text-gray-600 hover:text-green-700 transition-colors duration-200">
+								<svg viewBox="0 0 16 16" aria-hidden="true" width="24" height="24" class="fill-current">
+									<path d="M11.19 12.195c2.016-.24 3.77-1.475 3.99-2.603.348-1.778.32-4.339.32-4.339 0-3.47-2.286-4.488-2.286-4.488C12.062.238 10.083.017 8.027 0h-.05C5.92.017 3.942.238 2.79.765c0 0-2.285 1.017-2.285 4.488l-.002.662c-.004.64-.007 1.35.011 2.091.083 3.394.626 6.74 3.78 7.57 1.454.383 2.703.463 3.709.408 1.823-.1 2.847-.647 2.847-.647l-.06-1.317s-1.303.41-2.767.36c-1.45-.05-2.98-.156-3.215-1.928a3.614 3.614 0 0 1-.033-.496s1.424.346 3.228.428c1.103.05 2.137-.064 3.188-.189zm1.613-2.47H11.13v-4.08c0-.859-.364-1.295-1.091-1.295-.804 0-1.207.517-1.207 1.541v2.233H7.168V5.89c0-1.024-.403-1.541-1.207-1.541-.727 0-1.091.436-1.091 1.296v4.079H3.197V5.522c0-.859.22-1.541.66-2.046.456-.505 1.052-.764 1.793-.764.856 0 1.504.328 1.933.983L8 4.39l.417-.695c.429-.655 1.077-.983 1.934-.983.74 0 1.336.259 1.791.764.442.505.661 1.187.661 2.046v4.203z"></path>
+								</svg>
+							</a>
+							<a href="https://twitter.com/astrodotbuild" target="_blank" aria-label="Twitter" class="text-gray-600 hover:text-green-700 transition-colors duration-200">
+								<svg viewBox="0 0 16 16" aria-hidden="true" width="24" height="24" class="fill-current">
+									<path d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z"></path>
+								</svg>
+							</a>
+							<a href="https://github.com/withastro/astro" target="_blank" aria-label="GitHub" class="text-gray-600 hover:text-green-700 transition-colors duration-200">
+								<svg viewBox="0 0 16 16" aria-hidden="true" width="24" height="24" class="fill-current">
+									<path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path>
+								</svg>
+							</a>
+						</div>
+					</div>
+				</div>
+			</nav>
+		</header>
+
 		<!-- Hero -->
 		<section class="text-center py-16 px-4 bg-green-100">
 			<h1 class="text-4xl md:text-5xl font-bold mb-4">Grow Your Own Medicine</h1>
-				<img src="/heroImage.webp" alt="Medicinal Garden Kit" class="mx-auto mb-6 rounded-lg shadow-lg" width="600" height="400" fetchpriority="high">
+				<img src="/heroImage.webp" alt="Medicinal Garden Kit" class="mx-auto mb-6 rounded-lg shadow-lg" width="600" height="400" fetchpriority="high" loading="eager">
 			<p class="text-lg md:text-xl mb-6 max-w-2xl mx-auto">The Medicinal Garden Kit includes 10 powerful herbs you can grow in your backyard to naturally support your family's health.</p>
 			<a href="https://medicinalseedkit.com/kit/#aff=flash-deal" class="bg-green-700 hover:bg-green-800 text-white font-bold py-3 px-6 rounded-xl transition">Order Now</a>
-		  </section>
+		</section>
+		
 		<main>
 			
 		   <!-- Product Info -->
 		   <section class="py-12 px-4 max-w-4xl mx-auto">
-			<h2 class="text-3xl font-bold mb-4 text-center">What’s Inside the Kit?</h2>
+			<h2 class="text-3xl font-bold mb-4 text-center">What's Inside the Kit?</h2>
 			<ul class="grid grid-cols-1 md:grid-cols-2 gap-4 text-left list-disc pl-6">
 			  <li>Chamomile – for relaxation and sleep</li>
 			  <li>Echinacea – natural immune support</li>
@@ -44,13 +127,14 @@ const pageDescription = "Discover how you can grow 10 essential medicinal plants
 			  <li>Peppermint – digestion & nausea</li>
 			</ul>
 		  </section>
+		  
 			<!-- Benefits -->
 			<section class="bg-green-50 py-12 px-4">
 				<h2 class="text-3xl font-bold text-center mb-8">Why Choose the Medicinal Garden Kit?</h2>
 				<div class="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
 				  <div>
 					<h3 class="text-xl font-Atkinson">🌱 Natural Healing at Home</h3>
-					<p>Use nature’s remedies instead of synthetic chemicals.</p>
+					<p>Use nature's remedies instead of synthetic chemicals.</p>
 				  </div>
 				  <div>
 					<h3 class="text-xl font-Atkinson">💰 Save Money</h3>
@@ -67,16 +151,17 @@ const pageDescription = "Discover how you can grow 10 essential medicinal plants
 				</div>
 			  </section>
 		</main>
+		
 		 <!-- Testimonials -->
 		 <section class="bg-green-50 py-12 px-4">
 			<h2 class="text-3xl font-bold text-center mb-8">What Others Are Saying</h2>
 			<div class="max-w-4xl mx-auto space-y-6">
 			  <blockquote class="bg-white shadow-md p-6 rounded-xl">
-				<p>“I never thought I could grow my own medicine. This kit made it so simple and rewarding!”</p>
+				<p>"I never thought I could grow my own medicine. This kit made it so simple and rewarding!"</p>
 				<footer class="text-right text-sm text-gray-800">– Emily R.</footer>
 			  </blockquote>
 			  <blockquote class="bg-white shadow-md p-6 rounded-xl">
-				<p>“A must-have for every household. These herbs are life-changing!”</p>
+				<p>"A must-have for every household. These herbs are life-changing!"</p>
 				<footer class="text-right text-sm text-gray-800">– Mark T.</footer>
 			  </blockquote>
 			</div>
@@ -107,9 +192,121 @@ const pageDescription = "Discover how you can grow 10 essential medicinal plants
 	  
 		  <!-- CTA -->
 		  <section class="text-center py-12 bg-green-200">
-			<h2 class="text-3xl font-bold mb-4">Don’t Wait – Start Growing Your Healing Garden Today</h2>
+			<h2 class="text-3xl font-bold mb-4">Don't Wait – Start Growing Your Healing Garden Today</h2>
 			<a href="https://medicinalseedkit.com/kit/?ref=your-affiliate-id" class="bg-green-700 hover:bg-green-800 text-white font-bold py-3 px-6 rounded-xl transition">Order Your Kit Now</a>
 		  </section>
+		  
 		<Footer />
+
+		<style>
+			/* Hamburger Menu Styles */
+			.hamburger-icon {
+				width: 24px;
+				height: 18px;
+				position: relative;
+				cursor: pointer;
+			}
+
+			.hamburger-line {
+				display: block;
+				position: absolute;
+				height: 3px;
+				width: 100%;
+				background: #374151;
+				border-radius: 3px;
+				opacity: 1;
+				left: 0;
+				transform: rotate(0deg);
+				transition: 0.25s ease-in-out;
+			}
+
+			.hamburger-line:nth-child(1) {
+				top: 0px;
+			}
+
+			.hamburger-line:nth-child(2) {
+				top: 7px;
+			}
+
+			.hamburger-line:nth-child(3) {
+				top: 14px;
+			}
+
+			/* Hamburger Animation */
+			.hamburger-btn.active .hamburger-line:nth-child(1) {
+				top: 7px;
+				transform: rotate(135deg);
+			}
+
+			.hamburger-btn.active .hamburger-line:nth-child(2) {
+				opacity: 0;
+				left: -60px;
+			}
+
+			.hamburger-btn.active .hamburger-line:nth-child(3) {
+				top: 7px;
+				transform: rotate(-135deg);
+			}
+
+			/* Mobile Menu */
+			.mobile-menu {
+				max-height: 0;
+				overflow: hidden;
+				transition: max-height 0.3s ease-in-out;
+				background: white;
+				border-top: 1px solid #e5e7eb;
+			}
+
+			.mobile-menu.active {
+				max-height: 500px;
+			}
+
+			/* Smooth transitions */
+			* {
+				transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+				transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+				transition-duration: 150ms;
+			}
+		</style>
+
+		<script>
+			document.addEventListener('DOMContentLoaded', function() {
+				const hamburgerBtn = document.querySelector('.hamburger-btn');
+				const mobileMenu = document.querySelector('.mobile-menu');
+				
+				if (hamburgerBtn && mobileMenu) {
+					hamburgerBtn.addEventListener('click', function() {
+						hamburgerBtn.classList.toggle('active');
+						mobileMenu.classList.toggle('active');
+					});
+					
+					// Close menu when clicking on mobile links
+					const mobileLinks = mobileMenu.querySelectorAll('a');
+					mobileLinks.forEach(link => {
+						link.addEventListener('click', function() {
+							hamburgerBtn.classList.remove('active');
+							mobileMenu.classList.remove('active');
+						});
+					});
+					
+			// Close menu when clicking outside
+			document.addEventListener('click', function(e) {
+			const target = e.target as HTMLElement | null;
+				if (!target) return;
+				if (!hamburgerBtn.contains(target) && !mobileMenu.contains(target)) {
+				hamburgerBtn.classList.remove('active');
+				mobileMenu.classList.remove('active');
+				}
+			});
+		}
+			// Close menu on window resize if desktop size
+			window.addEventListener('resize', function () {
+				if (window.innerWidth >= 768 && hamburgerBtn && mobileMenu) {
+					hamburgerBtn.classList.remove('active');
+					mobileMenu.classList.remove('active');
+					}
+			});
+			});
+		</script>
 	</body>
 </html>
