@@ -1,0 +1,27 @@
+RocketWP – Headless WordPress Blog Built with Astro.js
+Copyright © 2025 Sainbayar Batmunkh
+
+---------------------------------------
+FONTS
+---------------------------------------
+Font: Atkinson Hyperlegible
+Source: Google Fonts (https://fonts.google.com/specimen/Atkinson+Hyperlegible)
+License: SIL Open Font License (OFL)
+Usage: Free for personal and commercial use, including modification and redistribution.
+
+---------------------------------------
+IMAGES
+---------------------------------------
+All demo images used in this theme are sourced from Pexels (https://www.pexels.com).
+
+Pexels License:
+- Free to use for personal and commercial purposes.
+- No attribution required.
+- Modification is allowed.
+
+Note: Demo images are for preview purposes only and are not included in the final package. Replace with your own images after installation.
+
+---------------------------------------
+CUSTOM CODE
+---------------------------------------
+All custom code, templates, and UI components are original works created by the author and are licensed for use according to Envato Market terms.
