@@ -1,9 +1,14 @@
-/*
-  The CSS in this style tag is based off of Bear Blog's default CSS.
-  https://github.com/HermanMartinus/bearblog/blob/297026a877bc2ab2b3bdfbd6b9f7961c350917dd/templates/styles/blog/default.css
-  License MIT: https://github.com/HermanMartinus/bearblog/blob/master/LICENSE.md
+/*!
+ * Theme Name: RocketWP
+ * Template: Headless WordPress + Astro.js
+ * Author: LABFOREST /SainDev/
+ * Author URI: https://github.com/MonDroids
+ * Description: A minimal, fast, and SEO-friendly blog template powered by Astro.js and Headless WordPress.
+ * Version: 1.0.0
+ * License: MIT
  */
 
+/* Global Styles */
 :root {
 	--accent: #FFD66B;
 	--accent-dark: #ffb700;
