@@ -1,0 +1,122 @@
+---
+/* Энэ component зөвхөн mobile hamburger toggle ажиллуулна */
+---
+
+<!-- Hamburger Button -->
+<button
+  class="md:hidden hamburger-btn focus:outline-none focus:ring-2 focus:ring-green-500 p-2"
+  aria-label="Toggle menu"
+>
+  <div class="hamburger-icon">
+    <span class="hamburger-line"></span>
+    <span class="hamburger-line"></span>
+    <span class="hamburger-line"></span>
+  </div>
+</button>
+
+<!-- Mobile Menu -->
+<nav
+  class="mobile-menu md:hidden hidden fixed inset-0 top-16 bg-white border-t border-gray-200 z-40"
+>
+  <div class="px-2 pt-4 pb-6 space-y-3">
+    <a href="/" class="block px-3 py-2 text-gray-700 hover:text-green-700 hover:bg-green-50 rounded-md font-medium">Home</a>
+    <a href="/blog" class="block px-3 py-2 text-gray-700 hover:text-green-700 hover:bg-green-50 rounded-md font-medium">Blog</a>
+    <a href="/about" class="block px-3 py-2 text-gray-700 hover:text-green-700 hover:bg-green-50 rounded-md font-medium">About</a>
+    <a href="/privacy" class="block px-3 py-2 text-gray-700 hover:text-green-700 hover:bg-green-50 rounded-md font-medium">Privacy Policy</a>
+    <a href="/terms" class="block px-3 py-2 text-gray-700 hover:text-green-700 hover:bg-green-50 rounded-md font-medium">Terms Of Service</a>
+    <a href="/contactus" class="block px-3 py-2 text-gray-700 hover:text-green-700 hover:bg-green-50 rounded-md font-medium">Contact Us</a>
+  </div>
+</nav>
+
+<style>
+  .hamburger-icon {
+    width: 24px;
+    height: 18px;
+    position: relative;
+    cursor: pointer;
+  }
+
+  .hamburger-line {
+    display: block;
+    position: absolute;
+    height: 3px;
+    width: 100%;
+    background: #374151;
+    border-radius: 3px;
+    opacity: 1;
+    left: 0;
+    transform: rotate(0deg);
+    transition: 0.25s ease-in-out;
+  }
+
+  .hamburger-line:nth-child(1) {
+    top: 0px;
+  }
+
+  .hamburger-line:nth-child(2) {
+    top: 7px;
+  }
+
+  .hamburger-line:nth-child(3) {
+    top: 14px;
+  }
+
+  /* Active animation */
+  .hamburger-btn.active .hamburger-line:nth-child(1) {
+    top: 7px;
+    transform: rotate(135deg);
+  }
+  .hamburger-btn.active .hamburger-line:nth-child(2) {
+    opacity: 0;
+    left: -60px;
+  }
+  .hamburger-btn.active .hamburger-line:nth-child(3) {
+    top: 7px;
+    transform: rotate(-135deg);
+  }
+
+  /* Menu visible */
+  .mobile-menu.active {
+    display: block;
+  }
+</style>
+
+<script lang="ts">
+    document.addEventListener("DOMContentLoaded", () => {
+    const hamburgerBtn = document.querySelector<HTMLButtonElement>('.hamburger-btn');
+    const mobileMenu = document.querySelector<HTMLElement>('.mobile-menu');
+
+    if (!hamburgerBtn || !mobileMenu) return;
+
+    // Toggle menu
+      hamburgerBtn.addEventListener('click', () => {
+      hamburgerBtn.classList.toggle('active');
+      mobileMenu.classList.toggle('active');
+    });
+
+    // Close menu when clicking links
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        hamburgerBtn.classList.remove('active');
+        mobileMenu.classList.remove('active');
+      });
+    });
+
+    // Close when clicking outside
+    document.addEventListener('click', (e) => {
+      if (e.target instanceof Node &&! hamburgerBtn.contains(e.target) && !mobileMenu.contains(e.target)) {
+        hamburgerBtn.classList.remove('active');
+        mobileMenu.classList.remove('active');
+      }
+
+    });
+
+    // Reset on resize
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 768) {
+        hamburgerBtn.classList.remove('active');
+        mobileMenu.classList.remove('active');
+      }
+    });
+  });
+</script>
