@@ -3,9 +3,9 @@ import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import Header from '../../components/Header.astro';
 
-import { fetchGraphQLPostBySlug, fetchGraphQLPosts } from '../../lib/graphQl'; //GraphQL client
+import { SITE_TITLE } from '../../consts';
+import { fetchGraphQLPostBySlug, fetchGraphQLPosts } from '../../lib/graphQl';
 
-// Динамик нөхцөл бий болгох
 export async function getStaticPaths() {
   const posts = await fetchGraphQLPosts();
   return posts.map((post) => ({
@@ -13,23 +13,60 @@ export async function getStaticPaths() {
   }));
 }
 
-// slug-г параметраас авах
 const { slug } = Astro.params;
 if (typeof slug !== 'string') {
   throw new Error('Slug parameter is missing or invalid');
 }
 
-// тухайн постыг авах
 const post = await fetchGraphQLPostBySlug(slug);
 if (!post) throw new Error(`Post not found`);
+
+const description = post.excerpt
+  ? post.excerpt.replace(/<[^>]+>/g, '').slice(0, 160)
+  : `Read about ${post.title} on ${SITE_TITLE}`;
+
+const ogImageUrl = post.featuredImage?.node?.sourceUrl
+  ? post.featuredImage.node.sourceUrl
+  : 'https://centuryhousegardens.com/default-og-image.jpg';
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: post.title,
+  description: description,
+  image: ogImageUrl,
+  author: {
+    "@type": "Organization",
+    name: SITE_TITLE
+  },
+  publisher: {
+    "@type": "Organization",
+    name: SITE_TITLE,
+    logo: {
+      "@type": "ImageObject",
+      url: "https://centuryhousegardens.com/logo.png"
+    }
+  },
+  url: canonicalURL.href,
+  mainEntityOfPage: canonicalURL.href,
+  datePublished: post.date,
+  dateModified: post.date
+};
 ---
 
 <html lang="en">
   <head>
     <BaseHead
       title={post.title}
-      description={post.excerpt.replace(/<[^>]+>/g, '')}
+      description={description}
+      image={ogImageUrl}
     />
+    <link rel="canonical" href={canonicalURL} />
+    <script type="application/ld+json">
+      {JSON.stringify(structuredData)}
+    </script>
   </head>
   <body class="prose dark:prose-invert dark:bg-gray-900 dark:text-white">
     <Header />
@@ -42,3 +79,153 @@ if (!post) throw new Error(`Post not found`);
     <Footer />
   </body>
 </html>
+
+
+<!-- энэ хуудсандах кодоо бүрэн SSG болгож болох код:
+ ---
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+
+import { SITE_TITLE } from '../../consts';
+
+// 🔹 WPGraphQL API fetch функц
+async function fetchGraphQL(query, variables = {}) {
+  const res = await fetch('https://yourwordpress.com/graphql', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ query, variables })
+  });
+
+  const json = await res.json();
+  if (json.errors) {
+    console.error(json.errors);
+    throw new Error('Failed to fetch GraphQL data.');
+  }
+  return json.data;
+}
+
+// 🔹 Pagination-тай бүх постын slug авах
+export async function getStaticPaths() {
+  let hasNextPage = true;
+  let endCursor = null;
+  const slugs = [];
+
+  while (hasNextPage) {
+    const data = await fetchGraphQL(`
+      query AllPosts($after: String) {
+        posts(first: 50, after: $after) {
+          nodes {
+            slug
+          }
+          pageInfo {
+            hasNextPage
+            endCursor
+          }
+        }
+      }
+    `, { after: endCursor });
+
+    slugs.push(...data.posts.nodes.map(post => ({ params: { slug: post.slug } })));
+    hasNextPage = data.posts.pageInfo.hasNextPage;
+    endCursor = data.posts.pageInfo.endCursor;
+  }
+
+  return slugs;
+}
+
+// 🔹 Нэг постын дата авах
+export async function get({ params }) {
+  const data = await fetchGraphQL(`
+    query PostBySlug($slug: ID!) {
+      post(id: $slug, idType: SLUG) {
+        title
+        content
+        date
+        excerpt
+        featuredImage {
+          node {
+            sourceUrl
+          }
+        }
+      }
+    }
+  `, { slug: params.slug });
+
+  if (!data.post) {
+    return { notFound: true };
+  }
+
+  return {
+    props: {
+      post: data.post,
+      slug: params.slug
+    }
+  };
+}
+
+// 🔹 Props ашиглах
+const { post, slug } = Astro.props;
+
+const description = post.excerpt
+  ? post.excerpt.replace(/<[^>]+>/g, '').slice(0, 160)
+  : `Read about ${post.title} on ${SITE_TITLE}`;
+
+const ogImageUrl = post.featuredImage?.node?.sourceUrl
+  ? post.featuredImage.node.sourceUrl
+  : 'https://centuryhousegardens.com/default-og-image.jpg';
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: post.title,
+  description: description,
+  image: ogImageUrl,
+  author: {
+    "@type": "Organization",
+    name: SITE_TITLE
+  },
+  publisher: {
+    "@type": "Organization",
+    name: SITE_TITLE,
+    logo: {
+      "@type": "ImageObject",
+      url: "https://centuryhousegardens.com/logo.png"
+    }
+  },
+  url: canonicalURL.href,
+  mainEntityOfPage: canonicalURL.href,
+  datePublished: post.date,
+  dateModified: post.date
+};
+---
+
+<html lang="en">
+  <head>
+    <BaseHead
+      title={post.title}
+      description={description}
+      image={ogImageUrl}
+    />
+    <link rel="canonical" href={canonicalURL} />
+    <script type="application/ld+json">
+      {JSON.stringify(structuredData)}
+    </script>
+  </head>
+  <body class="prose dark:prose-invert dark:bg-gray-900 dark:text-white">
+    <Header />
+    <main>
+      <article>
+        <h1>{post.title}</h1>
+        <div set:html={post.content} />
+      </article>
+    </main>
+    <Footer />
+  </body>
+</html>
+
+-->
+
+
