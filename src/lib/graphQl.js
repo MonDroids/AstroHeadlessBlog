@@ -1,93 +1,85 @@
-// src/lib/graphQl.js
-const WP_GRAPHQL_URL = process.env.WP_GRAPHQL_URL || 'https://centuryhousegardens.com/graphql';
-const AUTH_TOKEN = process.env.WP_GRAPHQL_AUTH_TOKEN || '';
+const WP_GRAPHQL_URL =
+  import.meta.env.WP_GRAPHQL_URL ||
+  import.meta.env.VITE_WP_API_URL ||
+  'https://cms.centuryhousegardens.com/graphql';
+// Хэрэв Authentication хэрэглэж байвал энд token оруулна
+// const WP_GRAPHQL_AUTH_TOKEN = import.meta.env.WP_GRAPHQL_AUTH_TOKEN || '';
 
-// Туслах: GraphQL POST хийх generic функц
-async function fetchGraphQL(query, variables = {}) {
+export async function fetchGraphQL(query, variables = {}) {
   const res = await fetch(WP_GRAPHQL_URL, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      ...(AUTH_TOKEN ? { Authorization: `Bearer ${AUTH_TOKEN}` } : {})
-    },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ query, variables })
   });
 
-  const json = await res.json();
-  if (!res.ok || json.errors) {
-    console.error('WPGraphQL error:', json.errors ?? json);
-    throw new Error('WPGraphQL fetch failed');
+  const text = await res.text();
+
+  try {
+    const json = JSON.parse(text);
+    if (json.errors) {
+      console.error('GraphQL errors:', json.errors);
+      throw new Error(json.errors[0]?.message || 'GraphQL query failed');
+    }
+    return json.data;
+  } catch (err) {
+    console.error('Non-JSON response:', text.slice(0, 200));
+    throw err;
   }
-  return json.data;
 }
 
-// Pagination-тай бүх постуудыг авах (slug-тай array буцаана)
-let _cachedAllPosts = null;
-export async function fetchGraphQLPosts({ perPage = 50 } = {}) {
-  if (_cachedAllPosts) return _cachedAllPosts;
+// Бүх постуудыг pagination-аар авах
 
-  const posts = [];
+export async function fetchGraphQLPosts() {
+  let posts = [];
   let hasNextPage = true;
   let endCursor = null;
 
-  const query = `
-    query Posts($first: Int!, $after: String) {
-      posts(first: $first, after: $after) {
-        nodes {
-          slug
-          title
-          date
-        }
-        pageInfo {
-          hasNextPage
-          endCursor
+  while (hasNextPage) {
+    const query = `
+      query GetPosts($after: String) {
+        posts(first: 50, after: $after) {
+          nodes {
+            slug
+            title
+            excerpt
+            date
+            featuredImage {
+              node {
+                sourceUrl
+              }
+            }
+          }
+          pageInfo {
+            hasNextPage
+            endCursor
+          }
         }
       }
-    }
-  `;
+    `;
 
-  while (hasNextPage) {
-    const data = await fetchGraphQL(query, { first: perPage, after: endCursor });
-    if (!data || !data.posts) break;
-    posts.push(...(data.posts.nodes || []));
-    hasNextPage = !!data.posts.pageInfo.hasNextPage;
+    const data = await fetchGraphQL(query, { after: endCursor });
+
+    posts = [...posts, ...data.posts.nodes];
+    hasNextPage = data.posts.pageInfo.hasNextPage;
     endCursor = data.posts.pageInfo.endCursor;
   }
 
-  _cachedAllPosts = posts;
   return posts;
 }
 
-// Нэг постыг slug-аар авч ирэх
-const _postCache = new Map();
+// Нэг постыг slug-аар авах
 export async function fetchGraphQLPostBySlug(slug) {
-  if (!slug) return null;
-  if (_postCache.has(slug)) return _postCache.get(slug);
-
   const query = `
-    query PostBySlug($slug: ID!) {
+    query GetPostBySlug($slug: ID!) {
       post(id: $slug, idType: SLUG) {
-        id
         slug
         title
-        content
         excerpt
+        content
         date
-        modified
         featuredImage {
           node {
             sourceUrl
-            altText
-            mediaDetails {
-              width
-              height
-            }
-          }
-        }
-        categories {
-          nodes {
-            name
-            slug
           }
         }
       }
@@ -95,7 +87,5 @@ export async function fetchGraphQLPostBySlug(slug) {
   `;
 
   const data = await fetchGraphQL(query, { slug });
-  const post = data?.post ?? null;
-  if (post) _postCache.set(slug, post);
-  return post;
+  return data.post;
 }
