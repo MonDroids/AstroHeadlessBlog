@@ -21,12 +21,21 @@
     "sharp": "^0.34.2"
   },
   "devDependencies": {
+<<<<<<< HEAD
     "@tailwindcss/postcss": "^4.1.11",
     "@types/sanitize-html": "^2.16.0",
     "autoprefixer": "^10.4.21",
     "critters": "^0.0.23",
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.11",
+=======
+    "@tailwindcss/postcss": "^4.1.17",
+    "@types/sanitize-html": "^2.16.0",
+    "autoprefixer": "^10.4.22",
+    "critters": "^0.0.23",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.17",
+>>>>>>> 54d996d (fix: add JSON-LD schema & optional modified field, resolve PostCSS import)
     "vite": "^7.0.6"
   }
 }
