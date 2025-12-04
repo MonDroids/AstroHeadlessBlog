@@ -1,11 +1,10 @@
 ---
-import BaseHead from '../../components/BaseHead.astro';
-import Footer from '../../components/Footer.astro';
-import Header from '../../components/Header.astro';
+import BaseHead from "../../components/BaseHead.astro";
+import Footer from "../../components/Footer.astro";
+import Header from "../../components/Header.astro";
+import { SITE_TITLE } from "../../consts";
+import { fetchGraphQLPostBySlug, fetchGraphQLPosts } from "../../lib/graphQl";
 
-import { fetchGraphQLPostBySlug, fetchGraphQLPosts } from '../../lib/graphQl'; //GraphQL client
-
-// Динамик нөхцөл бий болгох
 export async function getStaticPaths() {
   const posts = await fetchGraphQLPosts();
   return posts.map((post) => ({
@@ -20,18 +19,54 @@ if (typeof slug !== "string") {
 
 const post = await fetchGraphQLPostBySlug(slug);
 if (!post) throw new Error(`Post not found`);
+
+const cleanExcerpt = post.excerpt ? post.excerpt.replace(/<[^>]+>/g, "") : "";
+const description = cleanExcerpt.slice(0, 160) || `Read more on ${SITE_TITLE}`;
+
+const ogImageUrl =
+  post.featuredImage?.node?.sourceUrl ??
+  "https://centuryhousegardens.com/default-og-image.jpg";
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site).href;
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: post.title,
+  description: description,
+  image: ogImageUrl,
+  author: {
+    "@type": "Person",
+    name: "Century House Gardens",
+  },
+  publisher: {
+    "@type": "Organization",
+    name: SITE_TITLE,
+    logo: {
+      "@type": "ImageObject",
+      url: "https://centuryhousegardens.com/logo.png",
+    },
+  },
+  mainEntityOfPage: {
+    "@type": "WebPage",
+    "@id": canonicalURL,
+  },
+  datePublished: post.date,
+  dateModified: post.date,
+};
 ---
 
 <html lang="en">
   <head>
-    <BaseHead
-      title={post.title}
-      description={post.excerpt.replace(/<[^>]+>/g, '')}
-    />
+    <BaseHead title={post.title} description={description} image={ogImageUrl} />
+
     <link rel="canonical" href={canonicalURL} />
-    <script type="application/ld+json">
-      {JSON.stringify(structuredData)}
-    </script>
+
+    <!-- ✅ Correct JSON-LD without parsing error -->
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(structuredData)}
+    />
   </head>
 
   <body class="prose dark:prose-invert dark:bg-gray-900 dark:text-white">
@@ -45,7 +80,3 @@ if (!post) throw new Error(`Post not found`);
     <Footer />
   </body>
 </html>
-
--->
-
-
