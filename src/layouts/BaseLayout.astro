@@ -1,6 +1,7 @@
 ---
 const { title, description, ogImage, url } = Astro.props;
 ---
+
 <html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
@@ -16,6 +17,11 @@ const { title, description, ogImage, url } = Astro.props;
     <meta name="twitter:card" content="summary_large_image" />
 
     <link rel="icon" href="/favicon.ico" />
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7796374447657441"
+      crossorigin="anonymous"></script>
+    <meta name="google-adsense-account" content="ca-pub-7796374447657441" />
   </head>
   <body class="bg-white text-gray-900 dark:bg-gray-900 dark:text-white">
     <slot />

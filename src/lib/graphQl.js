@@ -2,6 +2,7 @@ const WP_GRAPHQL_URL =
   import.meta.env.WP_GRAPHQL_URL ||
   import.meta.env.VITE_WP_API_URL ||
   'https://cms.centuryhousegardens.com/graphql';
+// GraphQL query-г WP GraphQL endpoint руу илгээх
 
 export async function fetchGraphQL(query, variables = {}) {
   const res = await fetch(WP_GRAPHQL_URL, {
